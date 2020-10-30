@@ -285,11 +285,6 @@ var __extends = this && this.__extends || function(e, t) {
                 }
                 ;
                 t.saveItemByUriUpload = function(e, t, r, i) {
-                    if (i.apiEndpoint === d.default.filesV2 || i.apiEndpoint === d.default.graph_odb)
-                        return new y.Promise(function(e, t) {
-                            t(new h.default(p.default.unsupportedFeature,"URL upload not supported for OneDrive business"))
-                        }
-                        );
                     var n, o = m.appendToPath(b(e, i.apiEndpointUrl), "children"), a = {
                         Prefer: "respond-async"
                     };
