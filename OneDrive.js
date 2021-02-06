@@ -285,12 +285,19 @@ var __extends = this && this.__extends || function(e, t) {
                 ;
                 t.saveItemByUriUpload = function(selectedItem, jsonBody, uriData, apiConfiguration) {
                     var method = g.default.HTTP_POST;
+                    var n, o;
                     if (!'folder' in selectedItem) {
                         method = g.default.HTTP_PATCH;
+                        n, o = m.appendToPath(constructItemsUrl(selectedItem, apiConfiguration.apiEndpointUrl), ""), a = {
+                            Prefer: "respond-async"
+                        };
                     }
-                    var n, o = m.appendToPath(constructItemsUrl(selectedItem, apiConfiguration.apiEndpointUrl), "children"), a = {
-                        Prefer: "respond-async"
-                    };
+                    else {
+                        n, o = m.appendToPath(constructItemsUrl(selectedItem, apiConfiguration.apiEndpointUrl), "children"), a = {
+                            Prefer: "respond-async"
+                        };
+                    }
+
                     a.Authorization = "bearer " + apiConfiguration.accessToken;
                     jsonBody[(n = apiConfiguration.apiEndpoint,
                     n === d.default.graph_odb || n === d.default.graph_odc ? "@microsoft.graph.sourceUrl" : "@content.sourceUrl")] = uriData;
@@ -298,7 +305,7 @@ var __extends = this && this.__extends || function(e, t) {
                     var s, u, l = new g.default({
                         url: o,
                         clientId: apiConfiguration.clientId,
-                        method: g.default.HTTP_POST,
+                        method: method,
                         headers: a,
                         json: JSON.stringify(jsonBody),
                         apiEndpoint: apiConfiguration.apiEndpoint
