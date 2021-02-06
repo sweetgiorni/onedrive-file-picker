@@ -285,22 +285,32 @@ var __extends = this && this.__extends || function(e, t) {
                 ;
                 t.saveItemByUriUpload = function(selectedItem, jsonBody, uriData, apiConfiguration) {
                     var method = g.default.HTTP_POST;
-                    if (!('folder' in selectedItem)) {
-                        method = g.default.HTTP_PATCH;
-                    }
-                    var n, o = m.appendToPath(constructItemsUrl(selectedItem, apiConfiguration.apiEndpointUrl), method == g.default.HTTP_POST ? "children" : ""), a = {
+
+                    var n, url = constructItemsUrl(selectedItem, apiConfiguration.apiEndpointUrl), a = {
                         Prefer: "respond-async"
-                    };
+                    };               
+                    if (('folder' in selectedItem)) {
+                        url = m.appendToPath(url, "children");
+                    } else {
+                        var method = g.default.HTTP_PUT;
+                        url = m.appendToPath(url, "content");
+                    }
                     a.Authorization = "bearer " + apiConfiguration.accessToken;
                     jsonBody[(n = apiConfiguration.apiEndpoint,
                     n === d.default.graph_odb || n === d.default.graph_odc ? "@microsoft.graph.sourceUrl" : "@content.sourceUrl")] = uriData;
                     jsonBody.file = {};
+                    var payload = "";
+                    if (method == g.default.HTTP_PUT) { // Are we updating an existing file?
+                        payload = atob(uriData.split(',')[1]);
+                    } else {
+                        payload = JSON.stringify(jsonBody);
+                    }
                     var s, u, l = new g.default({
-                        url: o,
+                        url: url,
                         clientId: apiConfiguration.clientId,
                         method: method,
                         headers: a,
-                        json: JSON.stringify(jsonBody),
+                        json: payload,
                         apiEndpoint: apiConfiguration.apiEndpoint
                     });
                     return m.isPathDataUrl(uriData) ? (u = l,
