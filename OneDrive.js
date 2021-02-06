@@ -285,7 +285,7 @@ var __extends = this && this.__extends || function(e, t) {
                 ;
                 t.saveItemByUriUpload = function(selectedItem, jsonBody, uriData, apiConfiguration) {
                     var method = g.default.HTTP_POST;
-                    if (!'folder' in selectedItem) {
+                    if (!('folder' in selectedItem)) {
                         method = g.default.HTTP_PATCH;
                     }
                     var n, o = m.appendToPath(constructItemsUrl(selectedItem, apiConfiguration.apiEndpointUrl), method == g.default.HTTP_POST ? "children" : ""), a = {
