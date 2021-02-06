@@ -2178,7 +2178,7 @@ var __extends = this && this.__extends || function(e, t) {
                         default:
                             a.throwError(new l.default(s.default.internalError,"invalid API endpoint: " + this._apiEndpoint))
                         }
-                        this._method === o.HTTP_POST && this._request.setRequestHeader("Content-Type", this._json ? "application/json" : "text/plain")
+                        ((this._method === o.HTTP_POST) || (this._method === o.HTTP_PATCH)) && this._request.setRequestHeader("Content-Type", this._json ? "application/json" : "text/plain")
                     }
                     ;
                     o.HTTP_GET = "GET";
