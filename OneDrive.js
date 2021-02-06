@@ -1058,7 +1058,7 @@ var __extends = this && this.__extends || function(e, t) {
                             parentDiv: e.parentDiv,
                             redirectUri: e.redirectUri,
                             selectionMode: "single",
-                            viewType: "folders",
+                            viewType: e.viewType,
                             accountSwitchEnabled: e.accountSwitchEnabled,
                             commandMode: e.commandMode,
                             qosExtraData: e.qosExtraData
