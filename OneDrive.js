@@ -969,7 +969,7 @@ var __extends = this && this.__extends || function(e, t) {
                                     }
                                 }
                             })
-                              , t = {
+                              , queryStringArgs = {
                                 aid: d.applicationId,
                                 a: d.accessLevel,
                                 id: d.id,
@@ -989,7 +989,7 @@ var __extends = this && this.__extends || function(e, t) {
                                 cm: d.commandMode,
                                 qos: d.qosExtraData
                             }
-                              , r = s.appendQueryString(p.url, "picker", JSON.stringify(t));
+                              , r = s.appendQueryString(p.url, "picker", JSON.stringify(queryStringArgs));
                             o.default.logMessage("invoke picker with url: " + r);
                             if (!d.parentDiv)
                                 return c.openPopup(r).then(function() {
@@ -1034,7 +1034,7 @@ var __extends = this && this.__extends || function(e, t) {
             "../utilities/UrlUtilities": 32,
             "es6-promise": 34
         }],
-        10: [function(e, t, r) {
+        10: [function(e, t, r) { // Saver
             !function(e, t, n, o, r, a, s, u, l, d) {
                 "use strict";
                 Object.defineProperty(t, "__esModule", {
@@ -1428,6 +1428,7 @@ var __extends = this && this.__extends || function(e, t) {
                         t.scopes || (t.scopes = ["Files.ReadWrite"]);
                         t.commandMode = p.validateType(e.commandMode, s.default.TYPE_STRING, !0);
                         t.qosExtraData = p.validateType(e.qosExtraData, s.default.TYPE_OBJECT, !0);
+                        t.viewType = l.validateType(e.viewType, s.default.TYPE_STRING, !0, "folders");
                         null === t.commandMode && (t.commandMode = void 0);
                         null === t.qosExtraData && (t.qosExtraData = void 0);
                         return t
