@@ -156,7 +156,7 @@ var __extends = this && this.__extends || function(e, t) {
                   , w = 18e5
                   , i = "root";
                 function T(e, t, r) {
-                    var i = b(e, t.apiEndpointUrl);
+                    var i = constructItemsUrl(e, t.apiEndpointUrl);
                     r && (i = m.appendToPath(i, "?" + r));
                     var o = new g.default({
                         url: i,
@@ -200,7 +200,7 @@ var __extends = this && this.__extends || function(e, t) {
                 }
                 ;
                 function u(o, e, t) {
-                    var a = m.appendToPath(b(o, e.apiEndpointUrl), v.format("{0}.createLink", e.apiActionNamingSpace))
+                    var a = m.appendToPath(constructItemsUrl(o, e.apiEndpointUrl), v.format("{0}.createLink", e.apiActionNamingSpace))
                       , r = new g.default({
                         url: a,
                         clientId: e.clientId,
@@ -251,10 +251,9 @@ var __extends = this && this.__extends || function(e, t) {
                         t.onerror = function(e) {
                             f.default.logError("failed to read or upload the file", e);
                             s(new h.default(p.default.fileReaderFailure,"failed to read or upload the file, see console log for details"))
-                        }
-                        ;
+                        };
                         t.onload = function(e) {
-                            var t = m.appendToPath(b(u, d.apiEndpointUrl), "children('" + l.name + "')/content")
+                            var t = m.appendToPath(constructItemsUrl(u, d.apiEndpointUrl), "children('" + l.name + "')/content")
                               , r = {};
                             r["@name.conflictBehavior"] = l["@name.conflictBehavior"];
                             var i = {};
@@ -284,38 +283,42 @@ var __extends = this && this.__extends || function(e, t) {
                     )
                 }
                 ;
-                t.saveItemByUriUpload = function(e, t, r, i) {
-                    var n, o = m.appendToPath(b(e, i.apiEndpointUrl), "children"), a = {
+                t.saveItemByUriUpload = function(selectedItem, jsonBody, uriData, apiConfiguration) {
+                    var method = g.default.HTTP_POST;
+                    if (!'folder' in selectedItem) {
+                        method = g.default.HTTP_PATCH;
+                    }
+                    var n, o = m.appendToPath(constructItemsUrl(selectedItem, apiConfiguration.apiEndpointUrl), "children"), a = {
                         Prefer: "respond-async"
                     };
-                    a.Authorization = "bearer " + i.accessToken;
-                    t[(n = i.apiEndpoint,
-                    n === d.default.graph_odb || n === d.default.graph_odc ? "@microsoft.graph.sourceUrl" : "@content.sourceUrl")] = r;
-                    t.file = {};
+                    a.Authorization = "bearer " + apiConfiguration.accessToken;
+                    jsonBody[(n = apiConfiguration.apiEndpoint,
+                    n === d.default.graph_odb || n === d.default.graph_odc ? "@microsoft.graph.sourceUrl" : "@content.sourceUrl")] = uriData;
+                    jsonBody.file = {};
                     var s, u, l = new g.default({
                         url: o,
-                        clientId: i.clientId,
+                        clientId: apiConfiguration.clientId,
                         method: g.default.HTTP_POST,
                         headers: a,
-                        json: JSON.stringify(t),
-                        apiEndpoint: i.apiEndpoint
+                        json: JSON.stringify(jsonBody),
+                        apiEndpoint: apiConfiguration.apiEndpoint
                     });
-                    return m.isPathDataUrl(r) ? (u = l,
+                    return m.isPathDataUrl(uriData) ? (u = l,
                     new y.Promise(function(i, n) {
-                        u.start(function(e, t) {
-                            if (200 === t || 201 === t) {
+                        u.start(function(e, statusCode) {
+                            if (200 === statusCode || 201 === statusCode) {
                                 var r = {
                                     webUrl: null,
                                     value: [c.deserializeJSON(e.responseText)]
                                 };
                                 i(r)
                             } else
-                                n(new h.default(p.default.webRequestFailure,v.format("file uploading failed by data uri with HTTP status: {0}", t)))
+                                n(new h.default(p.default.webRequestFailure,v.format("file uploading failed by data uri with HTTP status: {0}", statusCode)))
                         }, function(e, t, r) {
                             n(new h.default(p.default.webRequestFailure,v.format("file uploading failed with HTTP status: {0}", t)))
                         })
                     }
-                    )) : m.isPathFullUrl(r) ? (s = l,
+                    )) : m.isPathFullUrl(uriData) ? (s = l,
                     new y.Promise(function(i, n) {
                         s.start(function(e, t) {
                             if (202 === t) {
@@ -368,7 +371,7 @@ var __extends = this && this.__extends || function(e, t) {
                         )).then(function(e) {
                             return T({
                                 id: e
-                            }, i).then(function(e) {
+                            }, apiConfiguration).then(function(e) {
                                 var t = {
                                     webUrl: null,
                                     value: [e]
@@ -403,11 +406,11 @@ var __extends = this && this.__extends || function(e, t) {
                     )
                 }
                 ;
-                function b(e, t) {
-                    var r;
-                    r = e.parentReference && e.parentReference.driveId ? m.appendToPath("drives", e.parentReference.driveId) : "drive";
-                    r = m.appendToPath(r, e.id === i ? "root" : "items/" + e.id);
-                    return m.appendToPath(t, r)
+                function constructItemsUrl(selectedItem, apiUrl) {
+                    var newUrlSegment;
+                    newUrlSegment = selectedItem.parentReference && selectedItem.parentReference.driveId ? m.appendToPath("drives", selectedItem.parentReference.driveId) : "drive";
+                    newUrlSegment = m.appendToPath(newUrlSegment, selectedItem.id === i ? "root" : "items/" + selectedItem.id);
+                    return m.appendToPath(apiUrl, newUrlSegment)
                 }
             }(0, r, e("../models/ApiEndpoint"), e("../models/ErrorType"), e("../utilities/Logging"), e("../utilities/ObjectUtilities"), e("../models/OneDriveSdkError"), e("../utilities/StringUtilities"), e("../utilities/UrlUtilities"), e("../utilities/XHR"), e("es6-promise"))
         }
@@ -2181,6 +2184,7 @@ var __extends = this && this.__extends || function(e, t) {
                     o.HTTP_GET = "GET";
                     o.HTTP_POST = "POST";
                     o.HTTP_PUT = "PUT";
+                    o.HTTP_PATCH = "PATCH";
                     return o
                 }();
                 t.default = r
