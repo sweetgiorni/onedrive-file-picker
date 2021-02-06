@@ -1074,14 +1074,14 @@ var __extends = this && this.__extends || function(e, t) {
                         if (t.uploadType === l.default.dataUrl || t.uploadType === l.default.url) {
                             var i = {
                                 name: t.fileName,
-                                "@name.conflictBehavior": t.nameConflictBehavior
+                                "@microsoft.graph.conflictBehavior": t.nameConflictBehavior
                             };
                             return n.saveItemByUriUpload(e.value[0], i, t.sourceUri, this.apiRequestConfig)
                         }
                         if (t.uploadType === l.default.form) {
                             i = {
                                 name: t.fileName,
-                                "@name.conflictBehavior": t.nameConflictBehavior
+                                "@microsoft.graph.conflictBehavior": t.nameConflictBehavior
                             };
                             return n.saveItemByFormUpload(e.value[0], i, t.fileInput, this.apiRequestConfig, t.progress)
                         }
