@@ -1428,7 +1428,7 @@ var __extends = this && this.__extends || function(e, t) {
                         t.scopes || (t.scopes = ["Files.ReadWrite"]);
                         t.commandMode = p.validateType(e.commandMode, s.default.TYPE_STRING, !0);
                         t.qosExtraData = p.validateType(e.qosExtraData, s.default.TYPE_OBJECT, !0);
-                        t.viewType = l.validateType(e.viewType, s.default.TYPE_STRING, !0, "folders");
+                        t.viewType = p.validateType(e.viewType, s.default.TYPE_STRING, !0, "folders");
                         null === t.commandMode && (t.commandMode = void 0);
                         null === t.qosExtraData && (t.qosExtraData = void 0);
                         return t
