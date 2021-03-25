@@ -298,7 +298,7 @@ var __extends = this && this.__extends || function(e, t) {
                     a.Authorization = "bearer " + apiConfiguration.accessToken;
                     jsonBody[(n = apiConfiguration.apiEndpoint,
                     n === d.default.graph_odb || n === d.default.graph_odc ? "@microsoft.graph.sourceUrl" : "@content.sourceUrl")] = uriData;
-                    jsonBody.file = {};
+                    jsonBody.file = {"@odata.type": "microsoft.graph.file"};
                     var payload = "";
                     if (method == g.default.HTTP_PUT) { // Are we updating an existing file?
                         payload = atob(uriData.split(',')[1]);
